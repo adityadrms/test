@@ -1,0 +1,277 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id       String     @id @default(cuid()) @db.VarChar(50)
+  name     String     @unique @db.VarChar(100)
+  address  String?    @db.Text
+  Employee Employee[]  @relation("CompanyToEmployee")
+  Place    Place[]     @relation("CompanyToPlace")
+
+  @@map("companies")
+}
+
+model Employee {
+  id        String   @id @default(cuid()) @db.VarChar(50)
+  name      String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(100)
+  role      Role     @default(USER)
+  password  String   @db.VarChar(255)
+  companyId String?  @db.VarChar(50)
+  company   Company? @relation("CompanyToEmployee",fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("employees")
+}
+model Place {
+  id        String  @id @default(cuid()) @db.VarChar(50)
+  name      String  @db.VarChar(255)
+  address   String? @db.Text
+  latitude  Float?
+  longitude Float?
+  companyId String  @db.VarChar(50)
+  company   Company @relation("CompanyToPlace",fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Well      Well[]  @relation("PlaceToWell")
+
+  @@map("places")
+}
+
+
+model Well {
+  id        String  @id @default(cuid()) @db.VarChar(50)
+  name      String  @db.VarChar(100)
+  address   String? @db.Text
+  latitude  Float?
+  longitude Float?
+  topic  String   @unique
+  placeId   String  @db.VarChar(50)
+  place     Place   @relation("PlaceToWell",fields: [placeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  Condition Condition[] @relation("WellToCondition")
+  Record Record[]
+  Notification Notification[]
+
+  @@map("wells")
+}
+
+model Record {
+  id String @id @default(cuid()) @db.VarChar(50)
+
+   dt              DateTime
+  wid              String
+  sid              String
+  recid            String
+  seqid            String
+  date             String
+  time             String
+  actcode          String
+  blockpos         String
+  bitdepth         String
+  deptbitv         String
+  md               String
+  tvd              String
+  logdepth         String
+  speedup          String
+  speeddown        String
+  rop              String
+  ropi             String
+  timeropi         String
+  hklda            String
+  hkldx            String
+  hkldpu           String
+  hkldso           String
+  woba             String
+  wobx             String
+  torqa            String
+  torqx            String
+  torqp            String
+  torqb            String
+  rpm              String
+  rpmm             String
+  totrpm           String
+  stppress         String
+  csgpress         String
+  mudflowine       String
+  mudflowin        String
+  mudflowoute      String
+  mudflowout       String
+  mudflowoutp      String
+  diffflow         String
+  klflow           String
+  muddensin        String
+  muddensout       String
+  mudtempin        String
+  mudtempout       String
+  mudcondin        String
+  mudcondout       String
+  mfiann           String
+  mfianne          String
+  surfrev          String
+  drillrev         String
+  reamrev          String
+  circrev          String
+  totrev           String
+  drilltime        String
+  reamtime         String
+  circtime         String
+  pumptime         String
+  rotatingtime     String
+  drilldist        String
+  stroke1          String
+  stroke2          String
+  stroke3          String
+  stroke4          String
+  totstks          String
+  totstksa         String
+  spm1             String
+  spm2             String
+  spm3             String
+  spm4             String
+  spm5             String
+  totspm           String
+  totspma          String
+  totpumpede       String
+  totpumpvol       String
+  totpumpvolan     String
+  totpumpedea      String
+  tankvoltot       String
+  tankvolact       String
+  tankvoltt        String
+  tankvolchgtot    String
+  tankvolchgact    String
+  tankvolchgtt     String
+  plbit            String
+  plstr            String
+  plann            String
+  plsurf           String
+  plmtr            String
+  plmwd            String
+  bithydpwr        String
+  bithydpwra       String
+  jif              String
+  jetvel           String
+  annveln          String
+  annvelx          String
+  ecddpt           String
+  ecdbit           String
+  ecdshoe          String
+  phydpwr          String
+  deptretm         String
+  lagstks          String
+  lagtime          String
+  dnhstroke        String
+  dnhtime          String
+  mse              String
+  doc              String
+  gas              String
+  dstrength        String
+  mseds            String
+  clcontent        String
+  in_slips         String?
+  bht              String
+  scfm             String
+  airflin          String
+  airfline         String
+  airfloutp        String
+  airflout         String
+  airpress         String
+  airtemp          String
+  whp              String
+  wht              String
+  h2s1             String
+  h2s2             String
+  h2s3             String
+  h2s4             String
+  co21             String
+  co22             String
+  co23             String
+  co24             String
+  bitsize          String
+  foamrate         String
+  spare_1          String
+  spare_2          String
+  spare_3          String
+  spare_4          String
+  spare_5          String
+  spare_6          String
+  spare_7          String
+  spare_8          String
+  spare_9          String
+  spare_10         String
+  spare_50         String
+  spare_51         String
+  spare_52         String
+  spare_53         String
+  spare_54         String
+  spare_55         String
+  spare_56         String
+  label            String?
+  posisiy          String?
+  tipenote         String?
+  idnote           String?
+
+
+  wellId String @db.VarChar(50)
+  well   Well   @relation(fields: [wellId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("records")
+}
+
+model Notification {
+  id        String   @id @default(cuid()) @db.VarChar(50)
+  title     String   @db.VarChar(255)
+  message   String?  @db.Text
+  seen      Boolean  @default(false)
+  wellId    String   @db.VarChar(50)
+  well      Well     @relation(fields: [wellId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @map("Created-At")
+
+  @@map("notifications")
+}
+
+model Condition {
+  id          String            @id @default(cuid()) @db.VarChar(50)
+  name        String
+  rules       RuleCondition[]   @relation("ConditionToRules")
+
+  wellId String @db.VarChar(50)
+   well   Well   @relation("WellToCondition", fields: [wellId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+
+  @@map("conditions")
+}
+
+model RuleCondition {
+  id            String        @id @default(cuid()) @db.VarChar(50)
+  condition     Condition   @relation("ConditionToRules", fields: [conditionId], references: [id], onDelete: Cascade)
+  conditionId   String
+  parameter     String
+  operator      String
+  thresholdValue Float
+  logicalOperator LogicalOperator
+
+  @@map("ruleconditions")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum LogicalOperator {
+  AND
+  OR
+}
+
+
