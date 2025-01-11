@@ -1,21 +1,20 @@
-# Use an official Node.js runtime as a parent image
+# Menggunakan image Node.js resmi
 FROM node:22.9.0
 
-# Set the working directory in the container
-WORKDIR /src
+# Set working directory di dalam container
+WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Menyalin package.json dan package-lock.json terlebih dahulu
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install -g npm@latest
 RUN npm install
 
-# Copy the rest of the application code
+# Menyalin seluruh isi direktori proyek ke dalam container
 COPY . .
 
-# Expose the port the app runs on
+# Menyediakan port yang digunakan oleh aplikasi
 EXPOSE 3001
 
-# Command to run the application
-CMD ["node", "main.js"]
+# Menjalankan aplikasi
+CMD ["node", "src/main.js"]
