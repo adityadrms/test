@@ -5,6 +5,7 @@ const {
   updateEmpService,
   deleteEmpservice,
   loginEmployeeService,
+  changePasswordService,
 } = require("../service/employee.service");
 
 const createEmpController = async (req, res, next) => {
@@ -18,6 +19,22 @@ const createEmpController = async (req, res, next) => {
   }
 };
 
+const changePasswordController = async (req, res, next) => {
+  const { employeeId } = req.params; // ID karyawan dari URL
+  const { oldPassword, newPassword } = req.body; // Password lama dan baru dari body request
+
+  try {
+    const result = await changePasswordService({
+      employeeId,
+      oldPassword,
+      newPassword,
+    });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error); // Kirim error ke middleware error handling
+  }
+};
+
 const loginEmployeeController = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -25,7 +42,12 @@ const loginEmployeeController = async (req, res, next) => {
     const token = await loginEmployeeService({ email, password });
     res.status(200).json({
       message: "Login successfully.",
-      token: token,
+      data: {
+        token: token.token,
+        employeeId: token.employeeId,
+        role: token.role,
+        companyId: token.companyId,
+      },
     });
   } catch (error) {
     next(error);
@@ -93,4 +115,5 @@ module.exports = {
   updateEmpController,
   deleteEmpController,
   loginEmployeeController,
+  changePasswordController,
 };

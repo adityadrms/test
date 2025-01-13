@@ -1,6 +1,8 @@
 const {
   getAllNotificationService,
   getIdNotificationService,
+  getAllRecordService,
+  getIdRecordService
 } = require("../service/notification.service");
 
 
@@ -29,8 +31,35 @@ const getIdNtfController = async (req, res, next) => {
     next(error);
   }
 };
+const getAllRcdController = async (req, res, next) => {
+  try {
+    const getAllRcd = await getAllRecordService();
+    res.status(200).json({
+      message: "Record retrieved successfully.",
+      data: getAllRcd,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getIdRcdController = async (req, res, next) => {
+  const { recordId } = req.params;
+
+  try {
+    const getIdRcd = await getIdRecordService(recordId);
+    res.status(200).json({
+      message: "Record retrieved successfully.",
+      data: getIdRcd,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAllNtfController,
-  getIdNtfController
+  getIdNtfController,
+  getAllRcdController,
+  getIdRcdController
 }

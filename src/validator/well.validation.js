@@ -17,15 +17,17 @@ const wellValidation = Joi.object({
   longitude: Joi.number().required().messages({
     "number.base": '"{#label}" harus berupa angka.',
   }),
-  topic: Joi.string()
-    .max(100)
-    .optional()
-    .messages({
-      "string.base": '"{#label}" harus berupa teks.',
-      "string.max": '"{#label}" tidak boleh lebih dari 100 karakter.',
-      "string.pattern.base":
-        '"{#label}" hanya boleh mengandung huruf, angka, dan underscore.',
-    }),
+  topic: Joi.string().max(100).optional().messages({
+    "string.base": '"{#label}" harus berupa teks.',
+    "string.max": '"{#label}" tidak boleh lebih dari 100 karakter.',
+    "string.pattern.base":
+      '"{#label}" hanya boleh mengandung huruf, angka, dan underscore.',
+  }),
+  rig: Joi.string().max(100).required().messages({
+    "string.base": '"{#label}" harus berupa teks.',
+    "string.max": '"{#label}" tidak boleh lebih dari 100 karakter.',
+    "any.required": '"{#label}" wajib diisi.',
+  }),
 });
 
 const updateWellValidation = Joi.object({
@@ -55,14 +57,17 @@ const updateWellValidation = Joi.object({
   longitude: Joi.number().required().messages({
     "number.base": '"{#label}" harus berupa angka.',
   }),
-  topic: Joi.string()
-  .max(100)
-  .optional() 
-  .messages({
-    'string.base': '"{#label}" harus berupa teks.',
-    'string.max': '"{#label}" tidak boleh lebih dari 100 karakter.',
-    'string.pattern.base': '"{#label}" hanya boleh mengandung huruf, angka, dan underscore.'
-  })
+  topic: Joi.string().max(100).optional().messages({
+    "string.base": '"{#label}" harus berupa teks.',
+    "string.max": '"{#label}" tidak boleh lebih dari 100 karakter.',
+    "string.pattern.base":
+      '"{#label}" hanya boleh mengandung huruf, angka, dan underscore.',
+  }),
+  rig: Joi.string().max(100).required().messages({
+    "string.base": '"{#label}" harus berupa teks.',
+    "string.max": '"{#label}" tidak boleh lebih dari 100 karakter.',
+    "any.required": '"{#label}" wajib diisi.',
+  }),
 });
 
 const deleteWellValidation = Joi.object({

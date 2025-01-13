@@ -57,6 +57,56 @@ const cretaeEmpService = async (data) => {
   });
 };
 
+const changePasswordService = async (data) => {
+  const { employeeId, oldPassword, newPassword } = data;
+
+  // Validasi input
+  if (!employeeId || !oldPassword || !newPassword) {
+    throw new Error(
+      "Employee ID, old password, and new password are required."
+    );
+  }
+
+  // Ambil data employee berdasarkan ID
+  const employee = await prismaClient.employee.findUnique({
+    where: { id: employeeId },
+  });
+
+  if (!employee) {
+    throw new Error("Employee not found.");
+  }
+
+  // Verifikasi password lama
+  const isOldPasswordValid = await bcrypt.compare(
+    oldPassword,
+    employee.password
+  );
+  if (!isOldPasswordValid) {
+    throw new Error("Old password is incorrect.");
+  }
+
+  // Validasi password baru (contoh: minimal 8 karakter)
+  // if (newPassword.length < 8) {
+  //   throw new Error("New password must be at least 8 characters long.");
+  // }
+
+  // Hash password baru
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update password di database
+  const updatedEmployee = await prismaClient.employee.update({
+    where: { id: employeeId },
+    data: {
+      password: hashedNewPassword,
+    },
+  });
+
+  return {
+    message: "Password changed successfully.",
+    employeeId: updatedEmployee.id,
+  };
+};
+
 const loginEmployeeService = async (data) => {
   const { error: employeeError } = loginEmployeeValidation.validate(data);
   if (employeeError) {
@@ -69,6 +119,7 @@ const loginEmployeeService = async (data) => {
 
   const employee = await prismaClient.employee.findUnique({
     where: { email },
+    include: { company: true },
   });
 
   if (!employee) {
@@ -87,8 +138,9 @@ const loginEmployeeService = async (data) => {
   );
   return {
     token,
-    employeeId: employee.id, 
-    role: employee.role, 
+    employeeId: employee.id,
+    role: employee.role,
+    companyId: employee.companyId,
   };
 };
 
@@ -166,4 +218,5 @@ module.exports = {
   updateEmpService,
   deleteEmpservice,
   loginEmployeeService,
+  changePasswordService,
 };

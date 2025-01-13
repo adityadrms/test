@@ -57,7 +57,7 @@ model Well {
   topic  String   @unique
   placeId   String  @db.VarChar(50)
   place     Place   @relation("PlaceToWell",fields: [placeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  rig       String? @db.VarChar(100)
   Condition Condition[] @relation("WellToCondition")
   Record Record[]
   Notification Notification[]

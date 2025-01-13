@@ -10,7 +10,20 @@ const getIdNotificationService = async (notificationId) => {
     })
 }
 
+const getAllRecordService = async () => {
+    return prismaClient.record.findMany();
+};
+
+const getIdRecordService = async (recordId) => {
+    return await prismaClient.record.findUnique({
+        where: {id: recordId}
+    })
+}
+
+
 module.exports = {
     getAllNotificationService,
-    getIdNotificationService
+    getIdNotificationService,
+    getAllRecordService,
+    getIdRecordService
 }

@@ -4,6 +4,7 @@ const {
   getIdWellService,
   updateWellService,
   deleteWellservice,
+  getByCompanyIdWellService,
 } = require("../service/well.service");
 
 const createWellController = async (req, res, next) => {
@@ -18,12 +19,10 @@ const createWellController = async (req, res, next) => {
 const getAllWellController = async (req, res, next) => {
   try {
     const getAllWellController = await getAllWellService();
-    res
-      .status(200)
-      .json({
-        message: "Well retrieved successfully.",
-        data: getAllWellController,
-      });
+    res.status(200).json({
+      message: "Well retrieved successfully.",
+      data: getAllWellController,
+    });
   } catch (error) {
     next(error);
   }
@@ -36,6 +35,19 @@ const getIdWellController = async (req, res, next) => {
     res
       .status(200)
       .json({ message: "Well retrieved successfully.", data: getIdWell });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getByCompanyIdWellController = async (req, res, next) => {
+  const { companyId } = req.params;
+
+  try {
+    const wells = await getByCompanyIdWellService(companyId);
+    res
+      .status(200)
+      .json({ message: "Wells retrieved successfully.", data: wells });
   } catch (error) {
     next(error);
   }
@@ -74,4 +86,5 @@ module.exports = {
   getIdWellController,
   updateWellController,
   deteleWellController,
+  getByCompanyIdWellController,
 };

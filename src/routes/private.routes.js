@@ -23,6 +23,7 @@ const {
   getIdWellController,
   updateWellController,
   deteleWellController,
+  getByCompanyIdWellController,
 } = require("../controller/well.controller.js");
 
 const {
@@ -39,11 +40,14 @@ const {
   getIdEmpController,
   updateEmpController,
   deleteEmpController,
+  changePasswordController,
 } = require("../controller/Employee.controller.js");
 
 const {
   getAllNtfController,
   getIdNtfController,
+  getAllRcdController,
+  getIdRcdController,
 } = require("../controller/notification.controller");
 
 const privateRouter = new express.Router();
@@ -65,6 +69,11 @@ privateRouter.get("/api/well/", authMiddleWare, getAllWellController);
 privateRouter.get("/api/well/:wellId", authMiddleWare, getIdWellController);
 privateRouter.put("/api/well/:wellId", authMiddleWare, updateWellController);
 privateRouter.delete("/api/well/:wellId", authMiddleWare, deteleWellController);
+privateRouter.get(
+  "/api/well/company/:companyId",
+  authMiddleWare,
+  getByCompanyIdWellController
+);
 
 //Company
 privateRouter.post("/api/company/", createCmpController);
@@ -103,6 +112,11 @@ privateRouter.delete(
   authMiddleWare,
   deleteEmpController
 );
+privateRouter.put(
+  "/api/employee/:employeeId/change-password",
+  authMiddleWare,
+  changePasswordController
+);
 
 // Condition
 privateRouter.post("/api/condition/", createConditionController);
@@ -131,5 +145,7 @@ privateRouter.get(
   authMiddleWare,
   getIdNtfController
 );
+privateRouter.get("/api/record/", authMiddleWare, getAllRcdController);
+privateRouter.get("/api/record/:recordId", authMiddleWare, getIdRcdController);
 
 module.exports = privateRouter;

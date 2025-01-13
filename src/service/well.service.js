@@ -36,6 +36,7 @@ const createWellService = async (data) => {
           latitude: wells.latitude,
           longitude: wells.longitude,
           topic: wells.topic,
+          rig: wells.rig,
           placeId: placeId,
         },
       });
@@ -47,13 +48,58 @@ const createWellService = async (data) => {
 
 //viewAll
 const getAllWellService = async () => {
-  return await prismaClient.well.findMany({});
+  return await prismaClient.well.findMany({
+    include: {
+      place: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
 };
 
 // View Id
 const getIdWellService = async (wellId) => {
   return await prismaClient.well.findUnique({
     where: { id: wellId },
+    include: {
+      place: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+//get by company id
+const getByCompanyIdWellService = async (companyId) => {
+  return prismaClient.well.findMany({
+    where: {
+      place: {
+        companyId: companyId,
+      },
+    },
+    include: {
+      place: {
+        include: {
+          company: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
   });
 };
 
@@ -91,6 +137,7 @@ const updateWellService = async (data) => {
         address: well.address,
         latitude: well.latitude,
         longitude: well.longitude,
+        rig: well.rig,
         placeId: placeId,
       },
     });
@@ -112,4 +159,5 @@ module.exports = {
   getIdWellService,
   updateWellService,
   deleteWellservice,
+  getByCompanyIdWellService,
 };
