@@ -5,10 +5,10 @@ FROM node:22.9.0
 WORKDIR /app
 
 # Menyalin package.json dan package-lock.json terlebih dahulu
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --include=dev
 
 # Menyalin seluruh isi direktori proyek ke dalam container
 COPY . .
