@@ -2,7 +2,7 @@
 FROM node:22.9.0
 
 # Set working directory di dalam container
-WORKDIR /app
+WORKDIR /src/seeder
 
 # Menyalin package.json dan package-lock.json terlebih dahulu
 COPY package.json package-lock.json ./
