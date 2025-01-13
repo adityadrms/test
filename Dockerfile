@@ -13,6 +13,9 @@ RUN npm install
 # Menyalin seluruh isi direktori proyek ke dalam container
 COPY . .
 
+# Generate Prisma
+RUN npx prisma generate
+
 # Menyediakan port yang digunakan oleh aplikasi
 EXPOSE 3001
 
