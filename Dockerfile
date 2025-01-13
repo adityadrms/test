@@ -20,4 +20,4 @@ RUN npx prisma generate
 EXPOSE 3001
 
 # Menjalankan aplikasi
-CMD ["node", "src/main.js"]
+CMD ["node", "seed.js"]
