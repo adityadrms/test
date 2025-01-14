@@ -9,6 +9,7 @@ COPY package.json package-lock.json ./
 
 # Install semua dependensi
 RUN npm install
+RUN npm install bcrypt kafkajs
 
 # Salin seluruh direktori src ke dalam container
 COPY src /src
